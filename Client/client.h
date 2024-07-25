@@ -4,12 +4,21 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-char *helpArguments[] = {"--help", "-h"};
-char *tokenArguments[] = {"--token", "-t"};
-char *portArguments[] = {"--port", "-p"};
-char *serverArguments[] = {"--server", "-s"};
+struct Arguments {
+    const char *longHand;
+    const char *shortHand;
+};
 
-char *toLower(const char *inputString) {
+const struct Arguments arguments[] =  {
+    { "--help", "-h" },
+    { "--token", "-t" },
+    { "--port", "-p" },
+    { "--server", "-s" }
+};
+
+const int argumentsSize = 3;
+
+char *stringToLower(const char *inputString) {
     int inputStringLength = strlen(inputString);
     char *outputString = (char *)malloc((inputStringLength + 1) * sizeof(char));
 
@@ -19,12 +28,10 @@ char *toLower(const char *inputString) {
     }
 
     for (int i = 0; i < inputStringLength; i++) {
-        fprintf(stdout, "Iteration: %c\n", inputString[i]);
         outputString[i] = tolower(inputString[i]);
     }
     outputString[inputStringLength] = '\0';
 
-    fprintf(stdout, "In: %s\nOut: %s\n", inputString, outputString);
     return outputString;
 }
 
@@ -37,9 +44,9 @@ int sizeOf(char *inputArray[]) {
     return argCount;
 }
 
-bool stringInArray(const char *inputString, char *inputArray[]) {
-    for (int i = 0; i <= sizeOf(inputArray); i++) {
-        if (toLower(inputArray[i]) == toLower(inputString)) {
+bool stringInStruct(const char *inputString, struct Arguments argument) {
+    for(int i = 0; i <= 1; i++) {
+        if(strcmp(inputString, argument.shortHand) == 0 || strcmp(inputString, argument.longHand) == 0) {
             return true;
         }
     }
