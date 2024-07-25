@@ -1,4 +1,3 @@
 *.out
 *.dSYM/
-.gitignore
 .vscode/
