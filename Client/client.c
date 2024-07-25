@@ -1,15 +1,18 @@
 #include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <regex.h>
 #include "client.h"
 
-/*
-Command line args:
-    --server -s (server IP)
-    --port -p (server port)
-    --token -t (client token)
-    --help -h
-*/
-
 int main(int argc, char *argv[]) {
+
+    bool skipNextIteration = false;
+    char *specifiedToken = (char *) malloc(sizeof(char) * 64);
+    int specifiedPort = -1;
+    char *specifiedServerAddress = (char *) malloc(sizeof(char) * 15);
+
     if (argc <= 1) {
         fprintf(stderr, "Need more arguments, use `%s -h` for more", argv[0]);
         return 1;
@@ -17,17 +20,37 @@ int main(int argc, char *argv[]) {
 
     // Parse command line arguments
     for (int i = 1; i < argc; i++) {
-        if (stringInStruct(argv[i], arguments[0])) {
-            printf("Help!\n");
-        } else if (stringInStruct(argv[i], arguments[1])) {
-            printf("Token!\n");
-        } else if (stringInStruct(argv[i], arguments[2])) {
-            printf("Port!\n");
-        } else if (stringInStruct(argv[i], arguments[3])) {
-            printf("Server!\n");
+        if (skipNextIteration) {
+            skipNextIteration = false;
         } else {
-            fprintf(stderr, "Unrecognised argument: %s\n", argv[i]);
+            if (stringInStruct(argv[i], arguments[0])) {
+                return printHelp(argv[0], 0);
+            } else if (stringInStruct(argv[i], arguments[1])) {
+                specifiedToken = argv[i + 1];
+                skipNextIteration = true;
+            } else if (stringInStruct(argv[i], arguments[2])) {
+                specifiedPort = atoi(argv[i + 1]);
+                skipNextIteration = true;
+            } else if (stringInStruct(argv[i], arguments[3])) {
+                specifiedServerAddress = argv[i + 1];
+                skipNextIteration = true;
+            } else {
+                fprintf(stderr, "Unrecognised argument: %s\n", argv[i]);
+            }
         }
     }
+
+    if (specifiedToken[0] == '\0') {
+        fprintf(stderr, "No token specified, please use `%s -h` for more information", argv[0]);
+        return 1;
+    } else if (specifiedPort == -1) {
+        fprintf(stderr, "No port specified, please use `%s -h` for more information", argv[0]);
+        return 1;
+    } else if (specifiedServerAddress[0] == '\0') {
+        fprintf(stderr, "No server address specified, please use `%s -h` for more information", argv[0]);
+        return 1;
+    }
+
+    fprintf(stdout, "Token: %s\nPort: %i\nServer Address: %s\n", specifiedToken, specifiedPort, specifiedServerAddress);
     return 0;
 }
