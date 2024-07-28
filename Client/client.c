@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     char *specifiedServerAddress = (char *) malloc(sizeof(char) * 15);
 
     if (argc <= 1) {
-        fprintf(stderr, "Need more arguments, use `%s -h` for more", argv[0]);
+        fprintf(stderr, "Need more arguments, use `%s -h` for more\n", argv[0]);
         return 1;
     }
 
@@ -40,16 +40,20 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    // Make sure all command line arguments are set
     if (specifiedToken[0] == '\0') {
-        fprintf(stderr, "No token specified, please use `%s -h` for more information", argv[0]);
-        return 1;
+        fprintf(stderr, "No token specified, please use `%s -h` for more information\n", argv[0]);
+        return 2;
     } else if (specifiedPort == -1) {
-        fprintf(stderr, "No port specified, please use `%s -h` for more information", argv[0]);
-        return 1;
+        fprintf(stderr, "No port specified, please use `%s -h` for more information\n", argv[0]);
+        return 2;
     } else if (specifiedServerAddress[0] == '\0') {
-        fprintf(stderr, "No server address specified, please use `%s -h` for more information", argv[0]);
-        return 1;
+        fprintf(stderr, "No server address specified, please use `%s -h` for more information\n", argv[0]);
+        return 2;
     }
+
+    // Start sanitizing 
+    
 
     fprintf(stdout, "Token: %s\nPort: %i\nServer Address: %s\n", specifiedToken, specifiedPort, specifiedServerAddress);
     return 0;
