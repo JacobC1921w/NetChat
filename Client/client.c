@@ -11,7 +11,9 @@ int main(int argc, char *argv[]) {
     bool skipNextIteration = false;
     char *specifiedToken = (char *) malloc(sizeof(char) * 64);
     int specifiedPort = -1;
-    char *specifiedServerAddress = (char *) malloc(sizeof(char) * 15);
+    char *specifiedServerAddress = (char *) malloc(sizeof(char) * 21);
+    char *clientUsername = (char *) malloc(sizeof(char) * 25);
+    char *clientPassword = (char *) malloc(sizeof(char) * 50);
 
     if (argc <= 1) {
         fprintf(stderr, "Need more arguments, use `%s -h` for more\n", argv[0]);
@@ -29,10 +31,13 @@ int main(int argc, char *argv[]) {
                 specifiedToken = argv[i + 1];
                 skipNextIteration = true;
             } else if (stringInStruct(argv[i], arguments[2])) {
-                specifiedPort = atoi(argv[i + 1]);
+                specifiedServerAddress = argv[i + 1];
                 skipNextIteration = true;
             } else if (stringInStruct(argv[i], arguments[3])) {
-                specifiedServerAddress = argv[i + 1];
+                clientUsername = argv[i + 1];
+                skipNextIteration = true;
+            } else if (stringInStruct(argv[i], arguments[4])) {
+                clientPassword = argv[i + 1];
                 skipNextIteration = true;
             } else {
                 fprintf(stderr, "Unrecognised argument: %s\n", argv[i]);
@@ -41,11 +46,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Make sure all command line arguments are set
-    if (specifiedToken[0] == '\0') {
-        fprintf(stderr, "No token specified, please use `%s -h` for more information\n", argv[0]);
-        return 2;
-    } else if (specifiedPort == -1) {
-        fprintf(stderr, "No port specified, please use `%s -h` for more information\n", argv[0]);
+    if (specifiedToken[0] == '\0' || clientUsername[0] == '\0' || clientPassword[0] == '\0') {
+        fprintf(stderr, "No login specified, please use `%s -h` for more information\n", argv[0]);
         return 2;
     } else if (specifiedServerAddress[0] == '\0') {
         fprintf(stderr, "No server address specified, please use `%s -h` for more information\n", argv[0]);
@@ -53,7 +55,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Start sanitizing 
-    
+    // Token
+        
 
     fprintf(stdout, "Token: %s\nPort: %i\nServer Address: %s\n", specifiedToken, specifiedPort, specifiedServerAddress);
     return 0;

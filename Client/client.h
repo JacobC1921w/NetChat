@@ -6,8 +6,9 @@ struct Arguments {
 const struct Arguments arguments[] =  {
     { "--help", "-h" },
     { "--token", "-t" },
-    { "--port", "-p" },
-    { "--server", "-s" }
+    { "--server", "-s" },
+    { "--username", "-u" },
+    { "--password", "-p" }
 };
 
 char *stringToLower(const char *inputString) {
@@ -51,8 +52,9 @@ int printHelp(char *argv0, int returnValue) {
     fprintf(stdout, "Options:\n\n");
     fprintf(stdout, "\t--help, -h\t\t\tPrints this help menu\n");
     fprintf(stdout, "\t--token=TOKEN, -t\t\tLogs in with the specified TOKEN\n");
-    fprintf(stdout, "\t--port=PORT, -p\t\t\tConnects to server using PORT (1-25565)\n");
-    fprintf(stdout, "\t--server=SERVER, -s\t\tConnects to the server using SERVER as the IP\n\n");
+    fprintf(stdout, "\t--server=SERVER, -s\t\tConnects to the specified SERVER with format IP:PORT\n");
+    fprintf(stdout, "\t--username=USERNAME, -u\t\tLogs in using the specified USERNAME, requires PASSWORD\n");
+    fprintf(stdout, "\t--password=PASSWORD, -p\t\tLogs in using the specified PASSWORD, requires USERNAME\n");
     fprintf(stdout, "Report bugs to \"<https://github.com/JacobC1921w/NetChat/issues>\"\n");
     return returnValue;
 }
